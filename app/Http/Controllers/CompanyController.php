@@ -24,6 +24,6 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        return response()->json($company->load('reviews'));
+        return response()->json($company->load(['reviews', 'lowestReview', 'highestReview']));
     }
 }

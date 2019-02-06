@@ -13,7 +13,9 @@ class Company extends Model
         'slug',
         'city',
         'country',
-        'industry'
+        'industry',
+        'lowest_review_id',
+        'highest_review_id'
     ];
 
     /**
@@ -36,6 +38,26 @@ class Company extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Returns lowest review
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function lowestReview()
+    {
+        return $this->hasOne(Review::class, 'id', 'lowest_review_id');
+    }
+
+    /**
+     * Returns highest review
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function highestReview()
+    {
+        return $this->hasOne(Review::class, 'id', 'highest_review_id');
     }
 
     /**

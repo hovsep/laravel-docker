@@ -21,6 +21,10 @@ class Review extends Model
         'company_id'
     ];
 
+    protected $appends = [
+        'summary_rating'
+    ];
+
     /**
      * Returns parent company
      *
@@ -29,5 +33,15 @@ class Review extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Returns sum of all ratings
+     *
+     * @return float|int
+     */
+    public function getSummaryRatingAttribute()
+    {
+        return array_sum($this->only(['culture', 'management', 'work_live_balance', 'career_development']));
     }
 }
