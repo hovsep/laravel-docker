@@ -23,7 +23,7 @@ class ReviewSeeder extends Seeder
                 if (!empty($companyData['reviews'])) {
                     foreach ($companyData['reviews'] as $reviewData) {
                         (new \App\Models\Review(array_merge(
-                            array_only($reviewData, ['title', 'user', 'rating.culture', 'pro', 'contra', 'suggestions']),
+                            array_only($reviewData, ['title', 'user', 'pro', 'contra', 'suggestions']),
                             $reviewData['rating'])
                         ))->company()
                           ->associate($company)
