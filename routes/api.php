@@ -14,4 +14,4 @@ use Illuminate\Http\Request;
 */
 
 Route::resource('company', 'CompanyController');
-Route::resource('review', 'CompanyController');
+Route::resource('review', 'ReviewController');
