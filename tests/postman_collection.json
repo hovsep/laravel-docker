@@ -1,0 +1,185 @@
+{
+	"info": {
+		"_postman_id": "0fc14253-a0a6-4742-bee2-935f38ecba07",
+		"name": "Laravel-docker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all companies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://laravel-docker.lo/api/company",
+					"protocol": "http",
+					"host": [
+						"laravel-docker",
+						"lo"
+					],
+					"path": [
+						"api",
+						"company"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get single company",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8faafcee-3f76-40e3-ae72-61c9fc3d3d81",
+						"exec": [
+							"pm.sendRequest(\"http://laravel-docker.lo/api/company\", function (err, response) {",
+							"    //Get actual existing company id",
+							"    pm.environment.set(\"companyId\", response.json()[0][\"id\"]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://laravel-docker.lo/api/company/{{companyId}}",
+					"protocol": "http",
+					"host": [
+						"laravel-docker",
+						"lo"
+					],
+					"path": [
+						"api",
+						"company",
+						"{{companyId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit a review",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e027e7b2-72bb-4d4d-b5b4-dd3d6d1b73fc",
+						"exec": [
+							"pm.sendRequest(\"http://laravel-docker.lo/api/company\", function (err, response) {",
+							"    //Get actual existing company slug",
+							"    pm.environment.set(\"companySlug\", response.json()[0][\"slug\"]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "Test title",
+							"description": "Review title (string)",
+							"type": "text"
+						},
+						{
+							"key": "user",
+							"value": "test-user@example.org",
+							"description": "User email",
+							"type": "text"
+						},
+						{
+							"key": "culture",
+							"value": "1",
+							"description": "Culture rating (integer)",
+							"type": "text"
+						},
+						{
+							"key": "management",
+							"value": "2",
+							"description": "Management rating (integer)",
+							"type": "text"
+						},
+						{
+							"key": "work_live_balance",
+							"value": "3",
+							"description": "Work&Live balance rating (integer)",
+							"type": "text"
+						},
+						{
+							"key": "career_development",
+							"value": "4",
+							"description": "Career development rating (integer)",
+							"type": "text"
+						},
+						{
+							"key": "pro",
+							"value": "Test pros",
+							"description": "Pros (text)",
+							"type": "text"
+						},
+						{
+							"key": "contra",
+							"value": "Test cons",
+							"description": "Cons (text)",
+							"type": "text"
+						},
+						{
+							"key": "suggestions",
+							"value": "Test suggestions",
+							"description": "Suggestions (text)",
+							"type": "text"
+						},
+						{
+							"key": "company_slug",
+							"value": "{{companySlug}}",
+							"description": "Company slug (string). See pre-request script",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://laravel-docker.lo/api/review",
+					"protocol": "http",
+					"host": [
+						"laravel-docker",
+						"lo"
+					],
+					"path": [
+						"api",
+						"review"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
