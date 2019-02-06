@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
-    protected $table = 'companies';
+    protected $table = 'reviews';
 
     protected $fillable = [
         'title',
@@ -17,6 +17,12 @@ class Review extends Model
         'career_development',
         'pro',
         'contra',
-        'suggestions'
+        'suggestions',
+        'company_id'
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }

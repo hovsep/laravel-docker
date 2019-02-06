@@ -24,6 +24,9 @@ class ReviewsTable extends Migration
             $table->longText('pro');
             $table->longText('contra');
             $table->longText('suggestions');
+
+            $table->unsignedInteger('company_id')->index();
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -15,4 +15,9 @@ class Company extends Model
         'country',
         'industry'
     ];
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }
