@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -13,7 +14,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Company::all());
     }
 
     /**
@@ -40,12 +41,12 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param Company $company
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Company $company)
     {
-        //
+        return response()->json($company->load('reviews'));
     }
 
     /**
