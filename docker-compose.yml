@@ -13,18 +13,22 @@ services:
     volumes:
       - ./app-src:/usr/src/laravel-docker
     ports:
-      - 8000:8000
+      - ${APP_PORT}:${APP_PORT}
     depends_on:
       - db
       - composer
+    environment:
+      APP_PORT: ${APP_PORT}
+
 
   db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     volumes:
-      - ./db-data:/var/lib/mysql
+      - ${MYSQL_DATA_DIR}:/var/lib/mysql
     environment:
-      MYSQL_USER: root
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: laravel-docker
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
