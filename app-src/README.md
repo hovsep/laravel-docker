@@ -1,42 +1,51 @@
-## Tasks
+## Description
 
-### Setup API
+This is Laravel in Docker demo project. It has 3 containers: composer, php and mysql.
+By default app will be deployed to `localhost:9000`.
+If `9000` port is busy on your machine please change it in root `.env` file. 
+App source code is mounted as volume, so you can edit it in your favorite IDE and changes will be applied immediately.
+Database will be seeded with test data automatically. 
 
-The goal is to create a REST-API. Data is provided as a json array [data.json](./data.json). Please implement REST endpoints for the following use cases:
+Enhancement #4 (List the review with the highest and the lowest rating for a particular company. Try to make it as efficient as possibility) is implemented.
+Reviews are compared by summary rating which is a simple sum of all ratings within given review.
+`lowest_review` and `highest_review` are returned when particular company is shown.
 
-* A user can submit a review for a company
-* A user can view companies and their average ratings
-* A user can view a specific company and read all their reviews
-* Add a postman collection to test and document your endpoints
+* REST endpoints:
+- `GET /api/company` - returns all companies
+- `GET /api/company/<id>` - returns single company by id
+- `POST  /api/review` - create new review 
 
-### Enhancement
+* Tests:
+The app is written in TDD style. You can find tests in `app-src/tests` directory. 
+Tests are run automatically when containers are created. 
+You can run tests manually (after running `docker-compose up`) by running:
+`sudo docker exec laravel-docker_php_1 ./vendor/bin/phpunit`
 
-Choose **one** of the following and add it the API-implementation:
+Postman collection is saved in `app-src/tests/postman_collection.json`.
 
-1. Gamification: Write a function that rewards users with badges: Users that review at least three companies, users that write a review with at least 400 characters, .... Try to come up with some ideas on your own and make the gamification system efficient and extensible.
-2. Write a simple [sentiment analysis](https://en.wikipedia.org/wiki/Sentiment_analysis): Given a review as input, try to guess whether it is positive, negative or even abusive.
-3. Write a "users who reviewed this company also reviewed" - function: Given a particular company list other companies that other users also reviewed.
-4. List the review with the highest and the lowest rating for a particular company. Try to make it as efficient as possibility.
-5. Tag cloud: Create a tag cloud with the most popular terms for a given company. Try to make it as meaningful as possible, e.g. by filtering out stop words like "the", "and", etc.
+## Prerequisites
+ - Docker (18.09.1)
+ - Docker-compose (1.23.2)
 
-## Requirements
 
-Use the tools you know and like. Still we need to impose the following requirements:
+## Instructions
 
-1. Please use git as a version control system and GitFlow has a branching model. Make sure that you have clear commit messages and understandable steps in your git-history ([How to Write a Git Commit Message](https://chris.beams.io/posts/git-commit/)).
-2. Document your work.
-3. Provide a readme and instructions for how we can run your solution. **Note** It should be runnable with one command. You can use the built in PHP-Webserver or you can provide a docker setup ( e.g. docker-compose). You can also assume composer to be present.
-4. You can decide if you want to use the provided [data.json](./data.json) as a data store, or you can implement it with any other storage. You **don't need to** use a relational database, but you can. 
-5. Implement your solution in a test driven approach.
+ - Clone this repository `git clone https://github.com/hovsep/laravel-docker.git`
+ - Run `cd laravel-docker && sudo docker-compose up`
+ 
+ Or just in one line: `git clone https://github.com/hovsep/laravel-docker.git && cd laravel-docker && sudo docker-compose up`
+ 
+ ## Questions
+Q: How would you describe your coding style? What makes your code clean? Can you point out an example?
+ * A: I use sort of mix of 3 coding styles: Google, Badoo and PSR-2. I think my code it pretty clean, because I follow SOLID, DRY, DIE and KISS principles.
+ For example: I use observers to handle model events instead of overriding model's methods. It makes my code cleaner and easier to read.
+ 
+Q: How maintainable is your code? What makes it maintainable?
+ * A: I think my code is pretty maintainable, because it follows MVC. It is self-documented and modular. 
+Using best practices such as inversion of control and containerization (Docker) makes it pretty maintainable.
 
-## Questions
-
-Briefly try to answer the following:
-
-* How would you describe your coding style? What makes your code clean? Can you point out an example?
-* How maintainable is your code? What makes it maintainable?
-* What would be your preferred storage for solving a problem like this in a production environment and why? What would be the alternatives? 
-
-## Data
-
-Data is provided via a json array in [data.json](./data.json)
+Q: What would be your preferred storage for solving a problem like this in a production environment and why? What would be the alternatives?
+If I were have to solve a problem like this, I would investigate the read\write loads and select appropriate storage.
+For example in case of high read-load I prefer Elastic Search, to handle high write-load Apache Cassandra might be the option.
+Also it could be a mix of a two or more storages, for example: MySql as primary storage and Redis as caching front-end, etc.
+Managed storages also should be reviewed as clouds are quite popular nowadays (for example AWS RDS instead of MySQL).
