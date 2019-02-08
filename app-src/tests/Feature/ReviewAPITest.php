@@ -40,7 +40,7 @@ class ReviewAPITest extends TestCase
 
             $response->assertStatus(200);
             $response->assertExactJson(['msg' => 'ok']);
-            $this->assertDatabaseHas('reviews', $review->toArray());
+            $this->assertDatabaseHas('reviews', array_except($review->toArray(), 'summary_rating'));
         }
     }
 }
