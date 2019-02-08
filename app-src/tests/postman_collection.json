@@ -37,9 +37,51 @@
 					"script": {
 						"id": "8faafcee-3f76-40e3-ae72-61c9fc3d3d81",
 						"exec": [
-							"pm.sendRequest(\"http://laravel-docker.lo/api/company\", function (err, response) {",
+							"pm.sendRequest(pm.variables.get(\"appHost\") + \"/api/company\", function (err, response) {",
 							"    //Get actual existing company id",
-							"    pm.environment.set(\"companyId\", response.json()[0][\"id\"]);",
+							"    pm.environment.set(\"existingCompanyId\", response.json()[Math.floor(Math.random() * response.json().length)][\"id\"]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "5cd85c7f-805d-44e9-a871-c01bf2a7fcfa",
+						"exec": [
+							"pm.test(\"Response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"var Ajv = require('ajv'),",
+							"    ajv = new Ajv({logger: console}),",
+							"    schema = {",
+							"        \"properties\": {",
+							"            \"id\": {",
+							"                \"type\": \"number\"",
+							"            },",
+							"            \"name\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"            \"slug\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"            \"city\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"            \"country\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"            \"indust2ry\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"        }",
+							"    };",
+							"",
+							"pm.test('Single company has correct structure', function() {",
+							"    pm.expect(ajv.validate(schema, pm.response.json())).to.be.true;",
 							"});"
 						],
 						"type": "text/javascript"
@@ -60,16 +102,14 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://laravel-docker.lo/api/company/{{companyId}}",
-					"protocol": "http",
+					"raw": "{{appHost}}/api/company/{{existingCompanyId}}",
 					"host": [
-						"laravel-docker",
-						"lo"
+						"{{appHost}}"
 					],
 					"path": [
 						"api",
 						"company",
-						"{{companyId}}"
+						"{{existingCompanyId}}"
 					]
 				}
 			},
@@ -83,9 +123,23 @@
 					"script": {
 						"id": "e027e7b2-72bb-4d4d-b5b4-dd3d6d1b73fc",
 						"exec": [
-							"pm.sendRequest(\"http://laravel-docker.lo/api/company\", function (err, response) {",
-							"    //Get actual existing company slug",
-							"    pm.environment.set(\"companySlug\", response.json()[0][\"slug\"]);",
+							"pm.sendRequest(pm.variables.get(\"appHost\") + \"/api/company\", function (err, response) {",
+							"    //Get actual existing company",
+							"    var existingCompany = response.json()[Math.floor(Math.random() * response.json().length)];",
+							"    pm.environment.set(\"existingCompanyId\", existingCompany.id);",
+							"    pm.environment.set(\"existingCompanySlug\", existingCompany.slug);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "1bc8d058-cd72-47a5-8c44-e93228e433cb",
+						"exec": [
+							"pm.test(\"Response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -160,18 +214,16 @@
 						},
 						{
 							"key": "company_slug",
-							"value": "{{companySlug}}",
+							"value": "{{existingCompanySlug}}",
 							"description": "Company slug (string). See pre-request script",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://laravel-docker.lo/api/review",
-					"protocol": "http",
+					"raw": "{{appHost}}/api/review",
 					"host": [
-						"laravel-docker",
-						"lo"
+						"{{appHost}}"
 					],
 					"path": [
 						"api",
@@ -180,6 +232,36 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "6d5c0340-98d8-4374-9aaf-39bed0ba958e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "262cbf8e-6e6a-4dd6-a3f4-80a6821e52c8",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "7de18f35-3d17-49f2-b913-b0b1f1253f6f",
+			"key": "appHost",
+			"value": "http://localhost:9000",
+			"type": "string"
 		}
 	]
 }
