@@ -7,7 +7,7 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring tokenizer ctype json bcmath &&
 
 WORKDIR /usr/src/laravel-docker
 
-CMD cp .env.example .env && \
+CMD while [ ! -f ./.env ]; do echo "Waiting for composer install" && sleep 30;done && \
     wait-for-it db:3306 -t 0 -- php ./artisan migrate && \
     php ./artisan db:seed && \
     ./vendor/bin/phpunit && \
