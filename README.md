@@ -45,7 +45,7 @@ Q: How maintainable is your code? What makes it maintainable?
 Using best practices such as inversion of control and containerization (Docker) makes it pretty maintainable.
 
 Q: What would be your preferred storage for solving a problem like this in a production environment and why? What would be the alternatives?
-If I were have to solve a problem like this, I would investigate the read\write loads and select appropriate storage.
+ * A: If I were have to solve a problem like this, I would investigate the read\write loads and select appropriate storage.
 For example in case of high read-load I prefer Elastic Search, to handle high write-load Apache Cassandra might be the option.
 Also it could be a mix of a two or more storages, for example: MySql as primary storage and Redis as caching front-end, etc.
 Managed storages also should be reviewed as clouds are quite popular nowadays (for example AWS RDS instead of MySQL).
